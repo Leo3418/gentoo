@@ -1,0 +1,26 @@
+name: Test ebuilds in Docker container
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  zstd-jni:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        test-case:
+          - zstd-jni
+          - zstd-jni-awt
+          - zstd-jni-unstable
+          - zstd-jni-unstable-awt
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-python@v2
+        with:
+          python-version: 3.9
+      - uses: ./.github/actions/run-test-case
+        with:
+          path: ./tests/test-cases/${{ matrix.test-case }}.sh
