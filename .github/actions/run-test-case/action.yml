@@ -1,0 +1,28 @@
+name: "Run a test case"
+description: "Run a test case in a Docker image via ebuild-commander"
+
+inputs:
+  path:
+    description: "Path to the test case definition file"
+    required: true
+
+runs:
+  using: "composite"
+  steps:
+    - name: "Download ebuild-commander"
+      run: git clone https://github.com/Leo3418/ebuild-commander.git
+      shell: bash
+    - name: "Check out the latest version of ebuild-commander"
+      run: git checkout "$(git tag | sort -Vu | tail -1)"
+      shell: bash
+      working-directory: ebuild-commander
+    - name: "Install ebuild-commander"
+      run: ./setup.py install --user
+      shell: bash
+      working-directory: ebuild-commander
+    - name: "Create directory for Portage configuration"
+      run: sudo mkdir -p /etc/portage
+      shell: bash
+    - name: "Run the test case"
+      run: tests/run.sh ${{ inputs.path }}
+      shell: bash

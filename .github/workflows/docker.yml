@@ -1,0 +1,25 @@
+name: Test ebuilds in Docker container
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  test-cases:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        test-case:
+          - weechat-3.1
+          - weechat-3.2
+          - weechat-9999
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-python@v2
+        with:
+          python-version: 3.9
+      - uses: ./.github/actions/run-test-case
+        with:
+          path: ./tests/test-cases/${{ matrix.test-case }}.sh
