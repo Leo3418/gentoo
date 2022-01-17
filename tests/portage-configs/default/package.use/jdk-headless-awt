@@ -1,0 +1,3 @@
+# Try to both reduce test duration and uncover issues with AWT being absent
+virtual/jdk             headless-awt
+dev-java/openjdk-bin    headless-awt

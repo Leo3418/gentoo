@@ -1,0 +1,2 @@
+# Prevent using glassfish-xmlrpc-api as the provider of xmlrpc-api
+dev-java/glassfish-xmlrpc-api

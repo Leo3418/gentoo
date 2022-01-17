@@ -1,0 +1,6 @@
+www-servers/tomcat
+
+# Dependencies
+dev-java/ant-eclipse-ecj
+dev-java/eclipse-ecj
+dev-java/jakartaee-migration

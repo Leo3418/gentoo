@@ -1,0 +1,5 @@
+# Accept unstable keyword for most common computers and CI environments
+*/* ~amd64
+
+# Do not accept the keyword for JDK 11 here
+virtual/jdk:11 -* amd64

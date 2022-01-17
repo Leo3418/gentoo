@@ -1,0 +1,2 @@
+dev-java/javax-xml-rpc-api  test.conf
+dev-java/javax-xml-soap-api test.conf
