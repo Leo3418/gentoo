@@ -52,6 +52,7 @@ S=${WORKDIR}/${MY_P}
 
 PATCHES=(
 	"${FILESDIR}/${PN}-9.0.50-insufficient-ecj.patch"
+	"${FILESDIR}/${PN}-9.0.56-no-fail-on-javadoc-warning.patch"
 )
 
 BND_HOME="${S}/tomcat-build-libs/bnd"

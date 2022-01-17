@@ -1,0 +1,106 @@
+From fe7ccce0ea7f8c5bf22013d58943dee27375ca7b Mon Sep 17 00:00:00 2001
+From: Yuan Liao <liaoyuan@gmail.com>
+Date: Sun, 16 Jan 2022 19:27:09 -0800
+Subject: [PATCH] build.xml: Do not fail on Javadoc warning
+
+Javadoc would issue warnings about missing classes, which would cause
+build failure if this change had not been applied.  As of the commit
+time, no packages in ::gentoo seem to provide these missing classes.
+
+      [javadoc] javadoc: warning - Class org.osgi.annotation.bundle.Capabilities not found.
+      [javadoc] javadoc: warning - Class org.osgi.annotation.bundle.Requirement not found.
+      [javadoc] javadoc: warning - Class org.osgi.annotation.bundle.Requirements not found.
+      [javadoc] javadoc: warning - Class org.osgi.annotation.bundle.Capabilities not found.
+      [javadoc] javadoc: warning - Class org.osgi.annotation.bundle.Requirement not found.
+      [javadoc] javadoc: warning - Class org.osgi.annotation.bundle.Capabilities not found.
+      [javadoc] javadoc: warning - Class org.osgi.annotation.bundle.Requirement not found.
+      [javadoc] Building index for all the packages and classes...
+      [javadoc] Building index for all classes...
+      [javadoc] Generating output/dist/webapps/docs/api/help-doc.html...
+      [javadoc] 7 warnings
+
+    BUILD FAILED
+    build.xml:1780: Javadoc issued warnings.
+
+Signed-off-by: Yuan Liao <liaoyuan@gmail.com>
+---
+ build.xml | 21 +++++++--------------
+ 1 file changed, 7 insertions(+), 14 deletions(-)
+
+diff --git a/build.xml b/build.xml
+index 5ce4b1b..493c8eb 100644
+--- a/build.xml
++++ b/build.xml
+@@ -2167,8 +2167,7 @@ Apache Tomcat ${version} native binaries for Win64 AMD64/EMT64 platform.
+       additionalparam="-breakiterator -notimestamp ${java9.javadoc.options}"
+       source="${compile.source}"
+       maxmemory="512m"
+-      failonerror="true"
+-      failonwarning="true">
++      failonerror="true">
+       <classpath>
+         <path refid="compile.classpath"/>
+         <path location="${ant.core.lib}"/>
+@@ -2189,8 +2188,7 @@ Apache Tomcat ${version} native binaries for Win64 AMD64/EMT64 platform.
+       additionalparam="-breakiterator -notimestamp ${java9.javadoc.options}"
+       source="${compile.source}"
+       maxmemory="512m"
+-      failonerror="true"
+-      failonwarning="true">
++      failonerror="true">
+       <classpath>
+         <path refid="compile.classpath"/>
+         <path location="${ant.core.lib}"/>
+@@ -2210,8 +2208,7 @@ Apache Tomcat ${version} native binaries for Win64 AMD64/EMT64 platform.
+       additionalparam="-breakiterator -notimestamp ${java9.javadoc.options}"
+       source="${compile.source}"
+       maxmemory="512m"
+-      failonerror="true"
+-      failonwarning="true">
++      failonerror="true">
+       <classpath>
+         <path refid="compile.classpath"/>
+         <path location="${ant.core.lib}"/>
+@@ -2231,8 +2228,7 @@ Apache Tomcat ${version} native binaries for Win64 AMD64/EMT64 platform.
+       additionalparam="-breakiterator -notimestamp ${java9.javadoc.options}"
+       source="${compile.source}"
+       maxmemory="512m"
+-      failonerror="true"
+-      failonwarning="true">
++      failonerror="true">
+       <classpath>
+         <path refid="compile.classpath"/>
+         <path location="${ant.core.lib}"/>
+@@ -2252,8 +2248,7 @@ Apache Tomcat ${version} native binaries for Win64 AMD64/EMT64 platform.
+       additionalparam="-breakiterator -notimestamp ${java9.javadoc.options}"
+       source="${compile.source}"
+       maxmemory="512m"
+-      failonerror="true"
+-      failonwarning="true">
++      failonerror="true">
+       <classpath>
+         <path refid="compile.classpath"/>
+         <path location="${ant.core.lib}"/>
+@@ -2272,8 +2267,7 @@ Apache Tomcat ${version} native binaries for Win64 AMD64/EMT64 platform.
+       charset="UTF-8"
+       additionalparam="-breakiterator -notimestamp"
+       maxmemory="512m"
+-      failonerror="true"
+-      failonwarning="true">
++      failonerror="true">
+       <classpath>
+         <path refid="compile.classpath"/>
+         <path location="${ant.core.lib}"/>
+@@ -2292,8 +2286,7 @@ Apache Tomcat ${version} native binaries for Win64 AMD64/EMT64 platform.
+       additionalparam="-breakiterator -notimestamp ${java9.javadoc.options}"
+       source="${compile.source}"
+       maxmemory="512m"
+-      failonerror="true"
+-      failonwarning="true">
++      failonerror="true">
+       <classpath>
+         <path refid="compile.classpath"/>
+         <path location="${ant.core.lib}"/>
+-- 
+2.34.1
+
