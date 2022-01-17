@@ -1,0 +1,4 @@
+dev-java/glassfish-xmlrpc-api
+
+# Dependencies
+dev-java/jakarta-xml-soap-api

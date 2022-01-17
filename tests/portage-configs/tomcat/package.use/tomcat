@@ -1,0 +1,5 @@
+# Enable all sensible USE flags
+www-servers/tomcat extra-webapps
+
+# Slot 8 uses xmlrpc-api only as a dependency for Javadoc generation
+www-servers/tomcat:8.5 doc

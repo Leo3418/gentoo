@@ -1,0 +1,33 @@
+name: "Test ebuilds in Docker container"
+
+on:
+  # Allow tests to be triggered manually
+  workflow_dispatch:
+
+jobs:
+  test-cases:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        test-case:
+          - new-packages
+          - tomcat-8.5
+          - tomcat-9
+          - tomcat-10
+        java: ['8', '11']
+        unstable: ['', '~amd64']
+        # Exclude test cases for packages that require Java 11
+        exclude:
+          - test-case: tomcat-9
+            java: '8'
+          - test-case: tomcat-10
+            java: '8'
+    steps:
+      - uses: actions/checkout@v2
+      - uses: ./.github/actions/run-test-case
+        env:
+          JAVA: ${{ matrix.java }}
+          UNSTABLE: ${{ matrix.unstable }}
+        with:
+          test-case: ${{ matrix.test-case }}

@@ -1,0 +1,8 @@
+# Accept keywords for unstable slots
+www-servers/tomcat:9
+www-servers/tomcat:10
+
+# Dependencies
+dev-java/ant-eclipse-ecj
+dev-java/eclipse-ecj
+dev-java/jakartaee-migration
