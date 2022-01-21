@@ -1,0 +1,3 @@
+# Accept keywords for reverse dependencies that are unstable only
+dev-java/openjfx
+sci-mathematics/cvc4

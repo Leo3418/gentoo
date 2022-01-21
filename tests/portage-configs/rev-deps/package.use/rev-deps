@@ -1,0 +1,39 @@
+# USE flags required for testing reverse dependencies
+
+dev-java/openjfx -media
+
+# Minimize builds to save time
+*/* -egl -introspection -vala
+media-libs/harfbuzz -graphite
+x11-libs/libdrm VIDEO_CARDS: -amdgpu -intel -nouveau -radeon -radeonsi
+media-libs/mesa -classic -dri3 -gbm -gles2 -llvm -zstd
+media-libs/mesa VIDEO_CARDS: -intel -nouveau -radeon -radeonsi
+# USE="gallium" required since mesa-21.3.0.ebuild
+<media-libs/mesa-21.3.0 -gallium
+
+# required by dev-java/openjfx-11.0.9_p0::gentoo
+# required by =dev-java/openjfx-11.0.9_p0 (argument)
+>=dev-java/swt-4.10-r2 opengl cairo
+# required by net-print/cups-filters-1.28.10-r1::gentoo[postscript]
+# required by net-print/cups-2.3.3_p2-r3::gentoo
+# required by dev-java/openjdk-11.0.13_p8::gentoo
+# required by dev-java/openjfx-11.0.9_p0::gentoo[doc]
+# required by =dev-java/openjfx-11.0.9_p0 (argument)
+>=app-text/ghostscript-gpl-9.55.0-r1 cups
+# required by x11-libs/gtk+-3.24.29::gentoo
+# required by x11-themes/adwaita-icon-theme-40.1.1::gentoo
+# required by x11-libs/gtk+-2.24.33::gentoo
+# required by dev-java/icedtea-bin-3.16.0::gentoo[gtk]
+# required by virtual/jdk-1.8.0-r6::gentoo
+# required by dev-java/hamcrest-core-1.1-r4::gentoo
+# required by dev-java/openjfx-11.0.9_p0::gentoo
+# required by =dev-java/openjfx-11.0.9_p0 (argument)
+>=x11-libs/cairo-1.16.0-r5 X
+# required by media-libs/mesa-21.3.4::gentoo
+# required by virtual/opengl-7.0-r2::gentoo
+# required by media-libs/glu-9.0.2::gentoo
+# required by virtual/glu-9.0-r2::gentoo
+# required by dev-java/swt-4.10-r2::gentoo
+# required by dev-java/openjfx-11.0.9_p0::gentoo
+# required by =dev-java/openjfx-11.0.9_p0 (argument)
+>=media-libs/libglvnd-1.4.0 X

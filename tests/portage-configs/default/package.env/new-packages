@@ -1,0 +1,4 @@
+dev-java/antlr-runtime:3.5  java-test.conf
+dev-java/antlr-tool:3.5     java-test.conf
+dev-java/antlr:3.5          java-test.conf
+dev-java/stringtemplate:4   java-test.conf

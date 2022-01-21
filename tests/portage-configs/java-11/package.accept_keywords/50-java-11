@@ -1,0 +1,2 @@
+virtual/jdk:11 ~amd64
+virtual/jre:11 ~amd64
