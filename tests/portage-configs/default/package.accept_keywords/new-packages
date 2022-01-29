@@ -1,0 +1,14 @@
+dev-java/antlr-runtime:4
+dev-java/antlr-tool:4
+dev-java/antlr:4
+dev-java/jakarta-json-api:1
+dev-java/jol-core
+
+# Ensure dependencies unaffected by https://bugs.gentoo.org/742554 are installed
+dev-java/antlr-runtime:3.5
+dev-java/antlr-tool:3.5
+dev-java/antlr:3.5
+dev-java/stringtemplate:4
+
+# Accept keywords for a version with Java 1.8 minimum
+dev-java/treelayout

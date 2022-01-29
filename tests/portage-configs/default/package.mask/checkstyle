@@ -1,0 +1,2 @@
+# Mask version that does not compile on JDK 11+
+=dev-util/checkstyle-7.2

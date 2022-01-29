@@ -1,0 +1,4 @@
+# Use JDK 1.8 to build the following packages
+
+# https://bugs.gentoo.org/831084
+dev-java/eclipse-ecj:4.5 jdk-1.8-build.conf

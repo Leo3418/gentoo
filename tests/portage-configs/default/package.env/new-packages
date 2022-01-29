@@ -1,0 +1,5 @@
+dev-java/antlr-runtime:4    java-test.conf
+dev-java/antlr-tool:4       java-test.conf
+dev-java/antlr:4            java-test.conf
+dev-java/jakarta-json-api   java-test.conf
+dev-java/jol-core           java-test.conf
