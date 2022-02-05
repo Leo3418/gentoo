@@ -1,0 +1,23 @@
+name: "Test ebuilds in Docker container"
+
+on:
+  # Allow tests to be triggered manually
+  workflow_dispatch:
+
+jobs:
+  test-cases:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        test-case:
+          - coq
+        unstable:
+          - '~amd64'
+    steps:
+      - uses: actions/checkout@v2
+      - uses: ./.github/actions/run-test-case
+        env:
+          UNSTABLE: ${{ matrix.unstable }}
+        with:
+          test-case: ${{ matrix.test-case }}
