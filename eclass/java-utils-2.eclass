@@ -1,4 +1,4 @@
-# Copyright 2004-2022 Gentoo Authors
+# Copyright 2004-2023 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 # @ECLASS: java-utils-2.eclass
@@ -64,6 +64,19 @@ JAVA_PKG_ALLOW_VM_CHANGE=${JAVA_PKG_ALLOW_VM_CHANGE:="yes"}
 # Example: use openjdk-11 to emerge foo:
 # @CODE
 #	JAVA_PKG_FORCE_VM=openjdk-11 emerge foo
+# @CODE
+
+# @ECLASS_VARIABLE: JAVA_PKG_NO_CLEAN
+# @DEFAULT_UNSET
+# @DESCRIPTION:
+# An array of *.class or *.jar files which must not be deleted by
+# java-pkg_clean.  The file paths in this array are relative to ${S}.
+#
+# @CODE
+#	JAVA_PKG_NO_CLEAN=(
+#		apps/susidns/src/lib/jstl.jar
+#		apps/susidns/src/lib/standard.jar
+#	)
 # @CODE
 
 # @ECLASS_VARIABLE: JAVA_PKG_WANT_BUILD_VM
@@ -2928,9 +2941,21 @@ is-java-strict() {
 # Java package cleaner function. This will remove all *.class and *.jar
 # files, removing any bundled dependencies.
 java-pkg_clean() {
-	if [[ -z "${JAVA_PKG_NO_CLEAN}" ]]; then
-		find "${@}" '(' -name '*.class' -o -name '*.jar' ')' -type f -delete -print || die
-	fi
+	pushd "${S}" > /dev/null || die
+	local find_predicate=( -type f '(' -name '*.class' -o -name '*.jar' ')' )
+	local keep
+	for keep in "${JAVA_PKG_NO_CLEAN[@]}"; do
+		# If this function is called without arguments,
+		# GNU find prepends './' to all paths it finds
+		[[ -z "${@}" ]] &&
+			[[ "${keep}" != ./* ]] && [[ "${keep}" != ../* ]] &&
+			keep="./${keep}"
+		find_predicate+=( -a '(' ! -path "${keep}" ')' )
+	done
+	set -- find "${@}" "${find_predicate[@]}" -delete -print
+	echo "${@}" >&2
+	"${@}" || die
+	popd > /dev/null || die
 }
 
 # @FUNCTION: java-pkg_gen-cp
