@@ -10,8 +10,8 @@ EAPI=8
 # multiple times to build multiple modules, but the eclass always
 # installs each module's Javadoc to the same directory, which would
 # trigger an error when the second module's Javadoc is installed.
-JAVA_PKG_IUSE="source"
-IUSE="doc migration-support suite vintage"
+JAVA_PKG_IUSE="source test"
+IUSE="doc migration-support suite test-kit vintage"
 
 inherit java-pkg-2 java-pkg-simple
 
@@ -36,6 +36,7 @@ CP_DEPEND="
 # USE-conditional dependencies in CP_DEPEND
 COND_DEPEND="
 	migration-support? ( dev-java/junit:4 )
+	test-kit? ( >=dev-java/assertj-core-3.14.0:3 )
 	vintage? ( dev-java/junit:4 )
 "
 
@@ -45,6 +46,12 @@ DEPEND="
 	>=virtual/jdk-11:*
 	${CP_DEPEND}
 	${COND_DEPEND}
+	test? (
+		test-kit? (
+			dev-java/asm:9
+			dev-java/byte-buddy:0
+		)
+	)
 "
 
 RDEPEND="
@@ -71,6 +78,7 @@ src_configure() {
 			junit-platform-suite-commons \
 			junit-platform-suite-engine \
 		)
+		$(usev test-kit junit-platform-testkit)
 
 		junit-jupiter-api
 		junit-jupiter-engine # For JUnit Jupiter tests -- the so-called
@@ -91,10 +99,14 @@ src_configure() {
 		# - junit-platform-jfr: For an experimental feature
 		# - junit-platform-runner: Deprecated
 		# - junit-platform-suite: Aggregator; does not have 'src/main/java'
-		# - junit-platform-testkit: Requires >=dev-java/assertj-core-3.14.0
 	)
 	local cp_packages=()
 	(use migration-support || use vintage) && cp_packages+=( junit-4 )
+	# Latest versions of assertj-core depend on this package, so only add
+	# assertj-core itself to the classpath without its dependencies to avoid
+	# pulling an existing installation of this package into the classpath
+	use test-kit &&
+		JAVA_GENTOO_CLASSPATH_EXTRA+=":$(java-pkg_getjars assertj-core-3)"
 	local save_IFS="${IFS}"
 	IFS=',' JAVA_GENTOO_CLASSPATH="${cp_packages[*]}"
 	IFS="${save_IFS}"
@@ -233,13 +245,19 @@ src_test() {
 	# - Some test sources use text blocks -- a feature introduced in Java 15.
 	#   A JDK at a lower version, e.g. 11, cannot compile them.
 	# - Some test classes depend on JUnit 5 modules that this ebuild does not
-	#   include, like junit-platform-runner and junit-platform-testkit.
+	#   include, like junit-platform-runner.
 	#
 	# Therefore, this ebuild uses a simpler approach to test the artifacts just
 	# built: it uses the artifacts to run tests in examples under the
 	# 'documentation/src' directory.  The test coverage will not be impressive,
 	# but at least this approach verifies that the copy of JUnit 5 just built
 	# is capable of running some simple tests launched from CLI.
+
+	local cp_packages=()
+	use test-kit && cp_packages+=( asm-9 byte-buddy )
+	local save_IFS="${IFS}"
+	IFS=',' JUNIT5_TEST_GENTOO_CLASSPATH="${cp_packages[*]}"
+	IFS="${save_IFS}"
 
 	local JUNIT5_TEST_SRC_DIR="documentation/src/test/java"
 	local JUNIT5_TEST_RESOURCE_DIR="documentation/src/test/resources"
@@ -249,14 +267,12 @@ src_test() {
 			example/DocumentationTestSuite.java \
 			example/SuiteDemo.java \
 		)
+		$(usev !test-kit example/testkit/)
 		$(usev !vintage example/JUnit4Tests.java)
 
 		# Need excluded module junit-platform-runner
 		example/JUnitPlatformClassDemo.java
 		example/JUnitPlatformSuiteDemo.java
-
-		# Need excluded module junit-platform-testkit
-		example/testkit/
 
 		# Not necessary for the tests; some files even require extra dependency
 		org/junit/api/tools/
@@ -297,6 +313,9 @@ src_test() {
 		"@${example_sources}"
 
 	local test_cp="${example_classes}:${JUNIT5_TEST_RESOURCE_DIR}:$(junit5_gen_cp)"
+	[[ -n "${JUNIT5_TEST_GENTOO_CLASSPATH}" ]] &&
+		test_cp+=":$(java-pkg_getjars --with-dependencies \
+			"${JUNIT5_TEST_GENTOO_CLASSPATH}")"
 	ejavac -d "${test_classes}" -encoding "${JAVA_ENCODING}" \
 		-classpath "${test_cp}" ${JAVAC_ARGS} \
 		"@${test_sources}"
