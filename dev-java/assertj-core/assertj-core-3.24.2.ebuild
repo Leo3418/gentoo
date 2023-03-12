@@ -42,6 +42,7 @@ DEPEND="
 		dev-java/guava:0
 		dev-java/jackson-databind:0
 		dev-java/jaxrs-api:3
+		dev-java/junit:5[test-kit]
 		dev-java/junit-pioneer:0
 		dev-java/mockito:4
 		dev-java/mockito-junit-jupiter:4
